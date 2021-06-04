@@ -30,20 +30,34 @@ h1 {
     color: var(--white);
 }
 
-.add-btn {
-    background-color: var(--blue);
-    border-radius: 10%;
-    border: none;
-    box-shadow: 2px 2px var(--black), -1px -1px var(--white);
-    z-index: 0;
+.main-container {
+    display: flex;
 }
 
-.add-btn:hover{
-    background-color: var(--lightblue);
+.library-grid {
+    display: flex;
+    flex-flow: row wrap;
+    width: 100%;
 }
 
-.add-btn:active {
-    box-shadow: none;
+.cell {
+    margin: 2rem 2rem;
+    width: 15rem;
+    height: 25rem;
+    padding: 1rem;
+    background-color:var(--lightblue);
+    border-radius: 10px;
+    box-shadow: 1px 1px 3px var(--black);
+}
+
+.info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-prompt {
+    display: flex;
 }
 
 .fa-plus {
@@ -53,23 +67,12 @@ h1 {
     transition: transform .7s ease-out;
 }
 
-.add-btn:hover .fa-plus{
+.info:hover .fa-plus{
     transform: rotate(360deg);
 }
 
-.main-container {
-    display: flex;
-}
-
-.library {
-    height: 10rem;
-}
-
-.info {
-    margin: 2rem 0;
-    padding: 1rem;
-    background-color:var(--lightblue);
-    transform: translateX(0%);
+.adding-book {
+    display: none;
 }
 
 .form-cancel {

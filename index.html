@@ -11,39 +11,50 @@
     <body>
         <header>
             <h1>Readify</h1>
-
-            <button class="add-btn"><i class="fas fa-book-open fa-2x"></i><i class="fas fa-plus fa-lg"></i></button>
         </header>
 
-        <main class="main-container">
-            <div class="library"></div>
+        <main class="main-container-grid">
+            <div class="library-grid">
 
-            <aside class="info">
-                <form class="adding-book">
-                    <div class="form-cancel">
-                        <i class="fas fa-window-close fa-lg"></i>
+                <div class="info cell">
+                    <div class="add-prompt">
+                        <div>
+                            <i class="fas fa-book-open fa-4x"></i><i class="fas fa-plus fa-2x"></i>
+                        </div>
                     </div>
-                    <div class="form-input">
-                        <label for="book-title">Book title:</label>
-                        <input type="text" name="add-book" id="book-title" required>
-                    </div>
-                    <div class="form-input">
-                        <label for="book-author">Author:</label>
-                        <input type="text" name="add-book" id="book-author" required>
-                    </div>
-                    <div class="form-input">
-                        <label for="pages-no">Total pages:</label>
-                        <input type="number" name="add-book" id="pages-no" required>
-                    </div>
-                    <div class="form-input">
-                        <label for="completed">Completed:</label>
-                        <input type="checkbox" name="add-book" id="completed">
-                    </div>
-                    <div class="form-submit">
-                        <button type="submit">Submit</button>
-                    </div>
-                </form>
-            </aside>
+
+                    <form class="adding-book">
+                        <div class="form-cancel">
+                            <i class="fas fa-window-close fa-lg"></i>
+                        </div>
+                        <div class="form-input">
+                            <label for="book-title">Book title:</label>
+                            <input type="text" name="add-book" id="book-title" required>
+                        </div>
+                        <div class="form-input">
+                            <label for="book-author">Author:</label>
+                            <input type="text" name="add-book" id="book-author" required>
+                        </div>
+                        <div class="form-input">
+                            <label for="pages-no">Total pages:</label>
+                            <input type="number" name="add-book" id="pages-no" required>
+                        </div>
+                        <div class="form-input">
+                            <label for="completed">Completed:</label>
+                            <input type="checkbox" name="add-book" id="completed">
+                        </div>
+                        <div class="form-submit">
+                            <button type="submit">Submit</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="cell"></div>
+                <div class="cell"></div>
+                <div class="cell"></div>
+            </div>
+
+            <aside></aside>
         </main>
         <script src="js/script.js"></script>
     </body>
