@@ -1,7 +1,8 @@
 :root {
+    --lightblue: rgb(80, 124, 218);
     --blue: rgb(53, 106, 219);
     --black: rgb(12, 12, 12);
-    --white: rgb(224, 218, 218);
+    --white: rgb(236, 234, 234);
 }
 
 html,
@@ -9,8 +10,9 @@ body {
     font-size: 10px;
     font-family: Arial, Helvetica, serif;
     background-color: var(--white);
-    color: var(--white);
+    color: var(--black);
     margin: 0;
+    overflow-x: hidden;
 }
 
 header {
@@ -25,16 +27,23 @@ header {
 h1 {
     margin: 0;
     font-size: 2.5rem;
+    color: var(--white);
 }
 
 .add-btn {
     background-color: var(--blue);
     border-radius: 10%;
+    border: none;
+    box-shadow: 2px 2px var(--black), -1px -1px var(--white);
     z-index: 0;
 }
 
 .add-btn:hover{
-    background-color: rgb(80, 124, 218)
+    background-color: var(--lightblue);
+}
+
+.add-btn:active {
+    box-shadow: none;
 }
 
 .fa-plus {
@@ -46,4 +55,68 @@ h1 {
 
 .add-btn:hover .fa-plus{
     transform: rotate(360deg);
+}
+
+.main-container {
+    display: flex;
+}
+
+.info {
+    margin: 2rem 0;
+    padding: 1rem;
+    background-color:var(--lightblue);
+    /*transform: translateX(200%); transform to get off the page*/
+}
+
+.form-cancel {
+    display: flex;
+    justify-content: flex-end;
+    color: rgb(184, 17, 17);
+}
+
+.fa-window-close {
+    background-color: var(--white);
+}
+
+.form-input {
+    margin: 1rem 0;
+}
+
+.info label {
+    display: inline-block;
+    width: 100px;
+    text-align: right;
+    font-size: 1.5rem;
+}
+
+.info input {
+    width: 8em;
+}
+
+.info input[type="checkbox"] {
+    width: auto;
+    margin-left: 1rem;
+}
+
+.form-submit {
+    text-align: center;
+}
+
+.form-submit button {
+    padding: .5rem 1rem;
+    color: var(--white);
+    background-color: var(--lightblue);
+    border: 1px solid var(--white);
+    border-radius: 5px;
+}
+
+.form-submit button:hover {
+    color: var(--lightblue);
+    background-color: var(--white);
+    border-color: var(--lightblue);
+    cursor: pointer;
+}
+
+.form-submit button:active {
+    color: var(--blue);
 }
