@@ -61,11 +61,17 @@ h1 {
     display: flex;
 }
 
+.library {
+    height: 10rem;
+    width: 60%;
+}
+
 .info {
+    justify-self: flex-end;
     margin: 2rem 0;
     padding: 1rem;
     background-color:var(--lightblue);
-    /*transform: translateX(200%); transform to get off the page*/
+    transform: translateX(0%);
 }
 
 .form-cancel {
