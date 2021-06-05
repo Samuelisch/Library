@@ -42,8 +42,8 @@ h1 {
 
 .cell {
     margin: 2rem 2rem;
-    width: 15rem;
-    height: 25rem;
+    width: 17rem;
+    height: 27rem;
     padding: 1rem;
     background-color:var(--lightblue);
     border-radius: 10px;
@@ -64,14 +64,18 @@ h1 {
     color: var(--white);
     margin-left: -11px;
     z-index: 1;
-    transition: transform .7s ease-out;
+    transition: transform .5s ease-out;
 }
 
-.info:hover .fa-plus{
+.cell:hover {
+    background-color: var(--blue);
+}
+
+.info:hover .fa-plus {
     transform: rotate(360deg);
 }
 
-.adding-book {
+.adding-book-form {
     display: none;
 }
 
@@ -126,4 +130,53 @@ h1 {
 
 .form-submit button:active {
     color: var(--blue);
+}
+
+.book {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.del-btn-container {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.fa-trash-alt {
+    text-align: right;
+    color: red;
+}
+
+.title {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-weight: bold;
+    font-size: 2.5rem;
+}
+
+.author {
+    font-size: 1.3rem;
+    margin-top : 1rem;
+}
+
+.progress {
+    color: rgba(189, 186, 186, 0.39);
+    margin: auto;
+}
+
+.pages:before {
+    display: block;
+    content: "Pages completed: ";
+    margin-bottom: .5rem;
+}
+
+.pages {
+    font-size: 1.2rem;
+    justify-self: flex-end;
+}
+
+.fa-arrow-left,
+.fa-arrow-right {
+    color: white;
+    margin: 0 1rem;
 }
