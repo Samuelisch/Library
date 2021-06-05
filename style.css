@@ -77,6 +77,10 @@ h1 {
 
 .adding-book-form {
     display: none;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-around;
+    align-content: center;
 }
 
 .form-cancel {
@@ -90,24 +94,50 @@ h1 {
 }
 
 .form-input {
+    display: flex;
     margin: 1rem 0;
 }
 
 .info label {
     display: inline-block;
-    width: 100px;
-    text-align: right;
+    width: 100%;
+    text-align: center;
     font-size: 1.5rem;
 }
 
 .info input {
-    width: 8em;
+    width: 6em;
+    background-color: rgb(80, 124, 218);
+    border: none;
+    border-bottom: 1px solid var(--white);
 }
 
 .info input[type="checkbox"] {
     width: auto;
     margin-left: 1rem;
 }
+
+.info:hover {
+    background-color:rgb(80, 124, 218);
+}
+
+.pages-container {
+    display: flex;
+}
+
+.pages-container input {
+    width: 50%;
+}
+
+input::-webkit-outer-spin-button, /* Chrome, Safari */
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] { /* Firefox */
+    -moz-appearance: textfield;
+  }
 
 .form-submit {
     text-align: center;

@@ -10,7 +10,7 @@ const bookCells = document.querySelectorAll('.book');
 const bookTitle = document.getElementById('add-title');
 const bookAuthor = document.getElementById('add-author');
 const bookPages = document.getElementById('add-pages');
-const bookCompleted = document.getElementById('add-completed');
+const bookPagesRead = document.getElementById('add-pages-read');
 
 //initialisation of flags
 let iconDisplay = true; //icon is being displayed
@@ -19,11 +19,11 @@ let iconDisplay = true; //icon is being displayed
 let myLibrary = [];
 
 class Book {
-    constructor(title, author, pages, completed) {
+    constructor(title, author, pages, pagesRead) {
         this.title = title;
         this.author = author;
         this.pages = pages;
-        this.completed = completed;
+        this.pagesRead = pagesRead;
     }
 }
 
@@ -35,12 +35,15 @@ function addBookToLibrary() {
         bookForm.reset();
         return;
     }
-    if (invalidNum(bookPages.value)) {
+    if (invalidTotalPages(bookPages.value) || invalidPagesRead(bookPagesRead.value)) {
         alert('Enter a proper number of pages');
         bookForm.reset();
         return;
     }
-    let newBook = new Book(bookTitle.value, bookAuthor.value, parseInt(bookPages.value), bookCompleted.checked)
+    if (!bookPagesRead.value) {
+        bookPagesRead.value = 0;
+    }
+    let newBook = new Book(bookTitle.value, bookAuthor.value, parseInt(bookPages.value), parseInt(bookPagesRead.value))
     displayBook(newBook); //display only the current book added
     myLibrary.push(newBook);
     removeForm();
@@ -81,7 +84,7 @@ function displayBook(book) {
 
     const pagesRead = document.createElement('span');
     pagesRead.className = "pages-read";
-    pagesRead.textContent = `0 / ${book.pages}`;
+    pagesRead.textContent = `${book.pagesRead} / ${book.pages}`;
     const pages = document.createElement('div');
     pages.className = "pages";
     const arrowLeft = document.createElement('i');
@@ -99,6 +102,9 @@ function displayBook(book) {
     bookCell.appendChild(progress);
     bookCell.appendChild(pages);
     libraryGrid.appendChild(bookCell);
+
+    //create eventListener for bookCell
+    bookCell.addEventListener('click', cellWindowClick);
 }
 
 //function to check if all form values are filled
@@ -107,8 +113,12 @@ function formEmpty() {
     return text.some(input => input.value == "");
 }
 
-function invalidNum(num) {
+function invalidTotalPages(num) {
     return parseFloat(num) < 1;
+}
+
+function invalidPagesRead(num) {
+    return parseInt(num) < 0 || parseFloat(num) > parseFloat(bookPages.value)
 }
 
 function limitChar(text) {
@@ -124,7 +134,7 @@ function displayForm() {
     if (!iconDisplay) return; //return if form is in display
     iconDisplay = false;
     icon.style.display = 'none';
-    bookForm.style.display = 'block';
+    bookForm.style.display = 'flex';
 }
 
 function removeForm() {
@@ -136,7 +146,9 @@ function removeForm() {
 
 //event handler for clicks within each book-cell window
 function cellWindowClick(e) {
-    return//to be compelted
+    if (e.target.classList.contains('fa-arrow-left')) {
+        //update data-num to position in array?
+    }
 }
 
 infoCell.addEventListener('click', displayForm);
@@ -148,4 +160,3 @@ submitBtn.addEventListener('click', e => {
     e.stopPropagation();
     addBookToLibrary();
 });
-bookCells.forEach(cell => cell.addEventListener('click', cellWindowClick));

@@ -22,26 +22,28 @@
                             <i class="fas fa-book-open fa-4x"></i><i class="fas fa-plus fa-2x"></i>
                         </div>
                     </div>
-                    
+
                     <form class="adding-book-form">
                         <div class="form-cancel">
                             <i class="fas fa-window-close fa-lg"></i>
                         </div>
                         <div class="form-input">
-                            <label for="add-title">Book title:</label>
+                            <label for="add-title">Title:</label>
                             <input type="text" name="add-book" id="add-title" class="form-text">
                         </div>
                         <div class="form-input">
                             <label for="add-author">Author:</label>
                             <input type="text" name="add-book" id="add-author" class="form-text">
                         </div>
-                        <div class="form-input">
-                            <label for="add-pages">Total pages:</label>
-                            <input type="number" name="add-book" id="add-pages" class="form-text">
-                        </div>
-                        <div class="form-input">
-                            <label for="add-completed">Completed:</label>
-                            <input type="checkbox" name="add-book" id="add-completed">
+                        <div class="pages-container">
+                            <div class="form-input">
+                                <label for="add-pages">Total pages:</label>
+                                <input type="number" name="add-book" id="add-pages" class="form-text">
+                            </div>
+                            <div class="form-input">
+                                <label for="add-pages-read">Pages read:</label>
+                                <input type="number" name="add-book" id="add-pages-read" value="0">
+                            </div>
                         </div>
                         <div class="form-submit">
                             <button type="button">Add book</button>
