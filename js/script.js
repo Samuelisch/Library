@@ -3,7 +3,7 @@ const infoCell = document.querySelector('.info');
 const icon = document.querySelector('.add-prompt');
 const bookForm = document.querySelector('.adding-book-form');
 const cancelBtn = document.querySelector('.fa-window-close');
-const submitBtn = document.querySelector('.form-submit');
+const submitBtn = document.querySelector('.form-submit button');
 const bookCells = document.querySelectorAll('.book');
 
 //selectors for book form
@@ -47,7 +47,6 @@ function addBookToLibrary() {
     displayBook(newBook); //display only the current book added
     myLibrary.push(newBook);
     removeForm();
-    console.log(myLibrary);
 }
 
 //function to display entire library upon reload.
@@ -57,7 +56,9 @@ function addBookToLibrary() {
 function displayBook(book) {
     //create cell and assign classes
     const bookCell = document.createElement('div');
+    //set data-set attribute to position in Library array.
     bookCell.className = "book cell";
+    bookCell.dataset.num = myLibrary.length;
     //create cell elements
     //delete button
     const btnContainer = document.createElement('div');
@@ -146,6 +147,13 @@ function removeForm() {
 
 //event handler for clicks within each book-cell window
 function cellWindowClick(e) {
+    //remove book from display and library
+    if (e.target.classList.contains('fa-trash-alt')) {
+        const dataNum = e.currentTarget.dataset.num;
+        myLibrary.splice(dataNum, 1);
+        e.currentTarget.remove();
+    }
+
     if (e.target.classList.contains('fa-arrow-left')) {
         //update data-num to position in array?
     }

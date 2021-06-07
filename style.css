@@ -175,6 +175,11 @@ input[type=number] { /* Firefox */
 
 .fa-trash-alt {
     text-align: right;
+    color: rgb(184, 17, 17);
+    padding: 5px 1px;
+}
+
+.fa-trash-alt:hover {
     color: red;
 }
 
