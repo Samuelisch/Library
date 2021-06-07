@@ -4,7 +4,7 @@ const icon = document.querySelector('.add-prompt');
 const bookForm = document.querySelector('.adding-book-form');
 const cancelBtn = document.querySelector('.fa-window-close');
 const submitBtn = document.querySelector('.form-submit button');
-const bookCells = document.querySelectorAll('.book');
+let bookCells = document.querySelectorAll('.book');
 
 //selectors for book form
 const bookTitle = document.getElementById('add-title');
@@ -15,8 +15,42 @@ const bookPagesRead = document.getElementById('add-pages-read');
 //initialisation of flags
 let iconDisplay = true; //icon is being displayed
 
+//localStorage.clear();
+//initialisation of localStorage
+//check if local storage available
+function storageAvailable(type) {
+    var storage;
+    try {
+        storage = window[type];
+        var x = '__storage_test__';
+        storage.setItem(x, x);
+        storage.removeItem(x);
+        return true;
+    }
+    catch(e) {
+        return e instanceof DOMException && (
+            // everything except Firefox
+            e.code === 22 ||
+            // Firefox
+            e.code === 1014 ||
+            // test name field too, because code might not be present
+            // everything except Firefox
+            e.name === 'QuotaExceededError' ||
+            // Firefox
+            e.name === 'NS_ERROR_DOM_QUOTA_REACHED') &&
+            // acknowledge QuotaExceededError only if there's something already stored
+            (storage && storage.length !== 0);
+    }
+}
+
 //initialisation of objects for storage
 let myLibrary = [];
+if (localStorage.length) {
+    let len = localStorage.length;
+    for (let i = 0; i < len; i++) {
+        myLibrary.push(JSON.parse(localStorage.getItem(i)));
+    }
+}
 
 class Book {
     constructor(title, author, pages, pagesRead) {
@@ -43,14 +77,18 @@ function addBookToLibrary() {
     if (!bookPagesRead.value) {
         bookPagesRead.value = 0;
     }
-    let newBook = new Book(bookTitle.value, bookAuthor.value, parseInt(bookPages.value), parseInt(bookPagesRead.value))
-    displayBook(newBook); //display only the current book added
+    let newBook = new Book(bookTitle.value, bookAuthor.value, parseInt(bookPages.value), parseInt(bookPagesRead.value)) //display only the current book added
     myLibrary.push(newBook);
+    displayBook(newBook);
+    localStorage.setItem(localStorage.length, JSON.stringify(newBook));
     removeForm();
+    bookCells = document.querySelectorAll('.book');
 }
 
-//function to display entire library upon reload.
-//function displayLibrary() {}
+//check if localStorage has existing record, if yes, display items.
+if (myLibrary) {
+    myLibrary.forEach(book => displayBook(book));
+}
 
 //function to display the book being added to the library obj, rather than the entire library.
 function displayBook(book) {
@@ -58,7 +96,7 @@ function displayBook(book) {
     const bookCell = document.createElement('div');
     //set data-set attribute to position in Library array.
     bookCell.className = "book cell";
-    bookCell.dataset.num = myLibrary.length;
+    bookCell.dataset.num = myLibrary.indexOf(book);
     //create cell elements
     //delete button
     const btnContainer = document.createElement('div');
@@ -105,6 +143,7 @@ function displayBook(book) {
     libraryGrid.appendChild(bookCell);
 
     //create eventListener for bookCell
+    bookCells = document.querySelectorAll('.book');
     bookCell.addEventListener('click', cellWindowClick);
 }
 
@@ -150,13 +189,27 @@ function cellWindowClick(e) {
     //remove book from display and library
     if (e.target.classList.contains('fa-trash-alt')) {
         const dataNum = e.currentTarget.dataset.num;
-        myLibrary.splice(dataNum, 1);
+        updateKey(dataNum);
         e.currentTarget.remove();
+        console.log(myLibrary);
+        console.log(localStorage);
     }
 
     if (e.target.classList.contains('fa-arrow-left')) {
         //update data-num to position in array?
     }
+}
+
+//update value of data-num and localStorage key, then removes the element to be deleted
+function updateKey(dataNum) {
+    myLibrary.splice(dataNum, 1);
+    localStorage.clear();
+    myLibrary.forEach(book => {
+        localStorage.setItem(myLibrary.indexOf(book), JSON.stringify(book));
+    });
+    bookCells.forEach(cell => {
+        cell.dataset.num = parseInt(cell.dataset.num) - 1;
+    });
 }
 
 infoCell.addEventListener('click', displayForm);
