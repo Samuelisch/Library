@@ -1,3 +1,4 @@
+const clearStorage = document.querySelector('.clear-storage');
 const libraryGrid = document.querySelector('.library-grid')
 const infoCell = document.querySelector('.info');
 const icon = document.querySelector('.add-prompt');
@@ -5,15 +6,19 @@ const bookForm = document.querySelector('.adding-book-form');
 const cancelBtn = document.querySelector('.fa-window-close');
 const submitBtn = document.querySelector('.form-submit button');
 let bookCells = document.querySelectorAll('.book');
+let progressIcon = document.querySelectorAll('.progress')
+let pagesReadText = document.querySelectorAll('.pages-read');
 
 //selectors for book form
 const bookTitle = document.getElementById('add-title');
 const bookAuthor = document.getElementById('add-author');
 const bookPages = document.getElementById('add-pages');
 const bookPagesRead = document.getElementById('add-pages-read');
+let arrows = document.querySelectorAll('.arrow');
 
 //initialisation of flags
 let iconDisplay = true; //icon is being displayed
+let mousedownID = -1;
 
 //localStorage.clear();
 //initialisation of localStorage
@@ -51,6 +56,7 @@ if (localStorage.length) {
         myLibrary.push(JSON.parse(localStorage.getItem(i)));
     }
 }
+loadBooks();
 
 class Book {
     constructor(title, author, pages, pagesRead) {
@@ -86,8 +92,10 @@ function addBookToLibrary() {
 }
 
 //check if localStorage has existing record, if yes, display items.
-if (myLibrary) {
-    myLibrary.forEach(book => displayBook(book));
+function loadBooks() {
+    if (myLibrary) {
+        myLibrary.forEach(book => displayBook(book));
+    }
 }
 
 //function to display the book being added to the library obj, rather than the entire library.
@@ -117,19 +125,23 @@ function displayBook(book) {
 
     const progress = document.createElement('div');
     progress.className = "progress";
+    progress.dataset.num = myLibrary.indexOf(book);
     const icon = document.createElement('i');
     icon.className = "far fa-check-circle fa-7x"
     progress.append(icon);
 
     const pagesRead = document.createElement('span');
     pagesRead.className = "pages-read";
+    pagesRead.dataset.num = myLibrary.indexOf(book);
     pagesRead.textContent = `${book.pagesRead} / ${book.pages}`;
     const pages = document.createElement('div');
     pages.className = "pages";
     const arrowLeft = document.createElement('i');
-    arrowLeft.className = "fas fa-arrow-left fa-lg"
+    arrowLeft.className = "fas fa-arrow-left fa-lg arrow"
+    arrowLeft.dataset.num = myLibrary.indexOf(book);
     const arrowRight = document.createElement('i');
-    arrowRight.className = "fas fa-arrow-right fa-lg"
+    arrowRight.className = "fas fa-arrow-right fa-lg arrow"
+    arrowRight.dataset.num = myLibrary.indexOf(book);
     pages.appendChild(arrowLeft);
     pages.appendChild(pagesRead);
     pages.appendChild(arrowRight);
@@ -144,9 +156,55 @@ function displayBook(book) {
 
     //create eventListener for bookCell
     bookCells = document.querySelectorAll('.book');
-    bookCell.addEventListener('click', cellWindowClick);
+    arrows = document.querySelectorAll('.arrow');
+    progressIcon = document.querySelectorAll('.progress')
+    pagesReadText = document.querySelectorAll('.pages-read');
+
+    updateProgress(book, progress.dataset.num);
 }
 
+function updateProgress(book, dataNum) {
+    progressIcon.forEach(icon => {
+        if (icon.dataset.num == dataNum) {
+            if (book.pagesRead == book.pages) {
+                icon.style.color = 'rgb(17, 192, 17)';
+            } else {
+                icon.style.color = 'rgba(189, 186, 186, 0.39)';
+            }
+        }
+    });
+}
+
+function changePagesRead(e) {
+    let dataNum = e.target.dataset.num;
+    if (e.target.classList.contains('fa-arrow-left')) {
+        let book = myLibrary[dataNum];
+        if (book.pagesRead <= 0) return; // return if under limit
+        book.pagesRead -= 1;
+        updateBook(book, dataNum);
+        updateProgress(book, dataNum);
+        console.log(book.pagesRead);
+    }
+
+    if (e.target.classList.contains('fa-arrow-right')) {
+        let book = myLibrary[dataNum];
+        if (book.pagesRead >= book.pages) return; //return if over limit
+        book.pagesRead += 1;
+        updateBook(book, dataNum);
+        updateProgress(book, dataNum);
+        console.log(book.pagesRead);
+    }
+}
+
+function updateBook(book, dataNum) {
+    localStorage.setItem(dataNum, JSON.stringify(myLibrary[dataNum]));
+        let allPagesRead = document.querySelectorAll('.pages-read');
+        allPagesRead.forEach(cell => {
+            if (cell.dataset.num == dataNum) {
+                cell.textContent = `${book.pagesRead} / ${book.pages}`;
+            }
+        })
+}
 //function to check if all form values are filled
 function formEmpty() {
     const text = Array.from(document.querySelectorAll('.form-text'));
@@ -186,17 +244,13 @@ function removeForm() {
 
 //event handler for clicks within each book-cell window
 function cellWindowClick(e) {
+    let dataNum = e.currentTarget.dataset.num;
     //remove book from display and library
     if (e.target.classList.contains('fa-trash-alt')) {
-        const dataNum = e.currentTarget.dataset.num;
         updateKey(dataNum);
         e.currentTarget.remove();
         console.log(myLibrary);
         console.log(localStorage);
-    }
-
-    if (e.target.classList.contains('fa-arrow-left')) {
-        //update data-num to position in array?
     }
 }
 
@@ -208,10 +262,21 @@ function updateKey(dataNum) {
         localStorage.setItem(myLibrary.indexOf(book), JSON.stringify(book));
     });
     bookCells.forEach(cell => {
-        cell.dataset.num = parseInt(cell.dataset.num) - 1;
+        cell.dataset.num = parseInt(cell.dataset.num) -1;
     });
 }
 
+function clearCache() {
+    localStorage.clear();
+    for (let book in myLibrary) {
+        delete myLibrary[book];
+    }
+    bookCells.forEach(cell => cell.remove());
+    console.log(myLibrary);
+    console.log(localStorage);
+}
+
+clearStorage.addEventListener('click', clearCache);
 infoCell.addEventListener('click', displayForm);
 cancelBtn.addEventListener('click', e => {
     e.stopPropagation(); //stops event bubbling back to the cell
@@ -221,3 +286,7 @@ submitBtn.addEventListener('click', e => {
     e.stopPropagation();
     addBookToLibrary();
 });
+arrows.forEach(arrow => {
+    arrow.addEventListener('click', changePagesRead);
+})
+bookCells.forEach(cell => cell.addEventListener('click', cellWindowClick));
