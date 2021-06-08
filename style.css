@@ -44,6 +44,7 @@ h1 {
 
 .library-grid {
     display: flex;
+    justify-content: center;
     flex-flow: row wrap;
     width: 100%;
 }
@@ -228,4 +229,10 @@ input[type=number] { /* Firefox */
 .fa-arrow-right {
     color: white;
     margin: 0 1rem;
+}
+
+@media (min-width: 460px) {
+    .library-grid {
+        justify-content: flex-start;
+    }
 }

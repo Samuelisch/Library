@@ -160,6 +160,12 @@ function displayBook(book) {
     progressIcon = document.querySelectorAll('.progress')
     pagesReadText = document.querySelectorAll('.pages-read');
 
+    //eventlisteners for book cell elements upon load
+    arrows.forEach(arrow => {
+        arrow.addEventListener('click', changePagesRead);
+    })
+    bookCells.forEach(cell => cell.addEventListener('click', cellWindowClick));
+
     updateProgress(book, progress.dataset.num);
 }
 
@@ -183,7 +189,6 @@ function changePagesRead(e) {
         book.pagesRead -= 1;
         updateBook(book, dataNum);
         updateProgress(book, dataNum);
-        console.log(book.pagesRead);
     }
 
     if (e.target.classList.contains('fa-arrow-right')) {
@@ -192,7 +197,6 @@ function changePagesRead(e) {
         book.pagesRead += 1;
         updateBook(book, dataNum);
         updateProgress(book, dataNum);
-        console.log(book.pagesRead);
     }
 }
 
@@ -249,8 +253,6 @@ function cellWindowClick(e) {
     if (e.target.classList.contains('fa-trash-alt')) {
         updateKey(dataNum);
         e.currentTarget.remove();
-        console.log(myLibrary);
-        console.log(localStorage);
     }
 }
 
@@ -272,8 +274,6 @@ function clearCache() {
         delete myLibrary[book];
     }
     bookCells.forEach(cell => cell.remove());
-    console.log(myLibrary);
-    console.log(localStorage);
 }
 
 clearStorage.addEventListener('click', clearCache);
@@ -286,7 +286,3 @@ submitBtn.addEventListener('click', e => {
     e.stopPropagation();
     addBookToLibrary();
 });
-arrows.forEach(arrow => {
-    arrow.addEventListener('click', changePagesRead);
-})
-bookCells.forEach(cell => cell.addEventListener('click', cellWindowClick));
