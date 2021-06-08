@@ -50,7 +50,7 @@ function storageAvailable(type) {
 
 //initialisation of objects for storage
 let myLibrary = [];
-if (localStorage.length) {
+if (localStorage.getItem('0')) {
     let len = localStorage.length;
     for (let i = 0; i < len; i++) {
         myLibrary.push(JSON.parse(localStorage.getItem(i)));
