@@ -20,7 +20,6 @@ let arrows = document.querySelectorAll('.arrow');
 let iconDisplay = true; //icon is being displayed
 let mousedownID = -1;
 
-//localStorage.clear();
 //initialisation of localStorage
 //check if local storage available
 function storageAvailable(type) {
@@ -49,7 +48,7 @@ function storageAvailable(type) {
 }
 
 //initialisation of objects for storage
-let myLibrary = [];
+let myLibrary = []; //LIBRARY
 if (localStorage.getItem('0')) {
     let len = localStorage.length;
     for (let i = 0; i < len; i++) {
@@ -58,7 +57,7 @@ if (localStorage.getItem('0')) {
 }
 loadBooks();
 
-class Book {
+class Book { //BOOK
     constructor(title, author, pages, pagesRead) {
         this.title = title;
         this.author = author;
@@ -68,7 +67,7 @@ class Book {
 }
 
 //event listener for adding book to library array
-function addBookToLibrary() {
+function addBookToLibrary() { //LIBRARY
     // check for inconsistencies in from values
     if (formEmpty()) {
         alert('Please properly state all details of the book.');
@@ -92,14 +91,14 @@ function addBookToLibrary() {
 }
 
 //check if localStorage has existing record, if yes, display items.
-function loadBooks() {
+function loadBooks() { //LIBRARY
     if (myLibrary) {
         myLibrary.forEach(book => displayBook(book));
     }
 }
 
 //function to display the book being added to the library obj, rather than the entire library.
-function displayBook(book) {
+function displayBook(book) { //LIBRARY
     //create cell and assign classes
     const bookCell = document.createElement('div');
     //set data-set attribute to position in Library array.
@@ -169,7 +168,7 @@ function displayBook(book) {
     updateProgress(book, progress.dataset.num);
 }
 
-function updateProgress(book, dataNum) {
+function updateProgress(book, dataNum) { //BOOK
     progressIcon.forEach(icon => {
         if (icon.dataset.num == dataNum) {
             if (book.pagesRead == book.pages) {
@@ -181,7 +180,7 @@ function updateProgress(book, dataNum) {
     });
 }
 
-function changePagesRead(e) {
+function changePagesRead(e) { //BOOK
     let dataNum = e.target.dataset.num;
     if (e.target.classList.contains('fa-arrow-left')) {
         let book = myLibrary[dataNum];
@@ -200,7 +199,7 @@ function changePagesRead(e) {
     }
 }
 
-function updateBook(book, dataNum) {
+function updateBook(book, dataNum) { //BOOK
     localStorage.setItem(dataNum, JSON.stringify(myLibrary[dataNum]));
         let allPagesRead = document.querySelectorAll('.pages-read');
         allPagesRead.forEach(cell => {
@@ -210,20 +209,20 @@ function updateBook(book, dataNum) {
         })
 }
 //function to check if all form values are filled
-function formEmpty() {
+function formEmpty() { //FORM
     const text = Array.from(document.querySelectorAll('.form-text'));
     return text.some(input => input.value == "");
 }
 
-function invalidTotalPages(num) {
+function invalidTotalPages(num) { //FORM
     return parseFloat(num) < 1;
 }
 
-function invalidPagesRead(num) {
+function invalidPagesRead(num) { //FORM
     return parseInt(num) < 0 || parseFloat(num) > parseFloat(bookPages.value)
 }
 
-function limitChar(text) {
+function limitChar(text) { //display book
     let textArr = [...text.split('')];
     if (textArr.length > 18) {
         return `${textArr.splice(0, 18).join('')}..`;
@@ -232,14 +231,14 @@ function limitChar(text) {
 }
 
 //click event to show add-book form, and toggle off icon.
-function displayForm() {
+function displayForm() { //FORM
     if (!iconDisplay) return; //return if form is in display
     iconDisplay = false;
     icon.style.display = 'none';
     bookForm.style.display = 'flex';
 }
 
-function removeForm() {
+function removeForm() { //FORM
     bookForm.reset();
     bookForm.style.display = 'none';
     iconDisplay = true;
@@ -247,7 +246,7 @@ function removeForm() {
 }
 
 //event handler for clicks within each book-cell window
-function cellWindowClick(e) {
+function cellWindowClick(e) { //BOOK
     let dataNum = e.currentTarget.dataset.num;
     //remove book from display and library
     if (e.target.classList.contains('fa-trash-alt')) {
@@ -257,7 +256,7 @@ function cellWindowClick(e) {
 }
 
 //update value of data-num and localStorage key, then removes the element to be deleted
-function updateKey(dataNum) {
+function updateKey(dataNum) { //BOOK
     myLibrary.splice(dataNum, 1);
     localStorage.clear();
     myLibrary.forEach(book => {
@@ -268,7 +267,7 @@ function updateKey(dataNum) {
     });
 }
 
-function clearCache() {
+function clearCache() { //STORAGE?
     localStorage.clear();
     for (let book in myLibrary) {
         delete myLibrary[book];
