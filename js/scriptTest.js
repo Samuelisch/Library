@@ -101,7 +101,13 @@ const library = (() => {
 
     }
 
-
+    function limitChar(text) { //used with display book
+        let textArr = [...text.split('')];
+        if (textArr.length > 18) {
+            return `${textArr.splice(0, 18).join('')}..`;
+        }
+        return text;
+    }
 })();
 
 class Book {
@@ -110,6 +116,67 @@ class Book {
         this.author = author;
         this.pages = pages;
         this.pagesRead = pagesRead;
+    }
+
+    updateProgress(book, dataNum) {
+        progressIcon.forEach(icon => {
+            if (icon.dataset.num == dataNum) {
+                if (book.pagesRead == book.pages) {
+                    icon.style.color = 'rgb(17, 192, 17)';
+                } else {
+                    icon.style.color = 'rgba(189, 186, 186, 0.39)';
+                }
+            }
+        });
+    }
+    
+    changePagesRead(e) {
+        let dataNum = e.target.dataset.num;
+        if (e.target.classList.contains('fa-arrow-left')) {
+            let book = myLibrary[dataNum];
+            if (book.pagesRead <= 0) return; // return if under limit
+            book.pagesRead -= 1;
+            updateBook(book, dataNum);
+            updateProgress(book, dataNum);
+        }
+    
+        if (e.target.classList.contains('fa-arrow-right')) {
+            let book = myLibrary[dataNum];
+            if (book.pagesRead >= book.pages) return; //return if over limit
+            book.pagesRead += 1;
+            updateBook(book, dataNum);
+            updateProgress(book, dataNum);
+        }
+    }
+
+    updateBook(book, dataNum) {
+        localStorage.setItem(dataNum, JSON.stringify(myLibrary[dataNum]));
+            let allPagesRead = document.querySelectorAll('.pages-read');
+            allPagesRead.forEach(cell => {
+                if (cell.dataset.num == dataNum) {
+                    cell.textContent = `${book.pagesRead} / ${book.pages}`;
+                }
+            })
+    }
+
+    cellWindowClick(e) { //BOOK? not sure if belongs here
+        let dataNum = e.currentTarget.dataset.num;
+        //remove book from display and library
+        if (e.target.classList.contains('fa-trash-alt')) {
+            updateKey(dataNum);
+            e.currentTarget.remove();
+        }
+    }
+
+    updateKey(dataNum) {
+        myLibrary.splice(dataNum, 1);
+        localStorage.clear();
+        myLibrary.forEach(book => {
+            localStorage.setItem(myLibrary.indexOf(book), JSON.stringify(book));
+        });
+        bookCells.forEach(cell => {
+            cell.dataset.num = parseInt(cell.dataset.num) -1;
+        });
     }
 }
 

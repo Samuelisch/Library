@@ -222,7 +222,7 @@ function invalidPagesRead(num) { //FORM
     return parseInt(num) < 0 || parseFloat(num) > parseFloat(bookPages.value)
 }
 
-function limitChar(text) {
+function limitChar(text) { //display book
     let textArr = [...text.split('')];
     if (textArr.length > 18) {
         return `${textArr.splice(0, 18).join('')}..`;
