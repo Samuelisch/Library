@@ -20,7 +20,6 @@ let arrows = document.querySelectorAll('.arrow');
 let iconDisplay = true; //icon is being displayed
 let mousedownID = -1;
 
-//localStorage.clear();
 //initialisation of localStorage
 //check if local storage available
 function storageAvailable(type) {
