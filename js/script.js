@@ -214,11 +214,11 @@ function formEmpty() {
     return text.some(input => input.value == "");
 }
 
-function invalidTotalPages(num) {
+function invalidTotalPages(num) { //FORM
     return parseFloat(num) < 1;
 }
 
-function invalidPagesRead(num) {
+function invalidPagesRead(num) { //FORM
     return parseInt(num) < 0 || parseFloat(num) > parseFloat(bookPages.value)
 }
 
@@ -231,14 +231,14 @@ function limitChar(text) {
 }
 
 //click event to show add-book form, and toggle off icon.
-function displayForm() {
+function displayForm() { //FORM
     if (!iconDisplay) return; //return if form is in display
     iconDisplay = false;
     icon.style.display = 'none';
     bookForm.style.display = 'flex';
 }
 
-function removeForm() {
+function removeForm() { //FORM
     bookForm.reset();
     bookForm.style.display = 'none';
     iconDisplay = true;
