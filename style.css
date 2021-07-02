@@ -1,6 +1,6 @@
 :root {
-    --lightblue: rgb(80, 124, 218);
-    --blue: rgb(53, 106, 219);
+    --lightblue: rgb(136, 166, 231);
+    --blue: rgb(63, 109, 207);
     --black: rgb(12, 12, 12);
     --white: rgb(236, 234, 234);
 }
@@ -76,10 +76,6 @@ h1 {
     transition: transform .5s ease-out;
 }
 
-.cell:hover {
-    background-color: var(--blue);
-}
-
 .info:hover .fa-plus {
     transform: rotate(360deg);
 }
@@ -116,7 +112,7 @@ h1 {
 
 .info input {
     width: 6em;
-    background-color: rgb(80, 124, 218);
+    background-color: var(--lightblue);
     border: none;
     border-bottom: 1px solid var(--white);
 }
