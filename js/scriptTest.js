@@ -1,3 +1,22 @@
+let bookCells = document.querySelectorAll('.book');
+let arrows = document.querySelectorAll('.arrow');
+let progressIcon = document.querySelectorAll('.progress');
+let pagesReadText = document.querySelectorAll('.pages-read');
+const libraryGrid = document.querySelector('.library-grid')
+
+//selectors for book form
+const bookTitle = document.getElementById('add-title');
+const bookAuthor = document.getElementById('add-author');
+const bookPages = document.getElementById('add-pages');
+const bookPagesRead = document.getElementById('add-pages-read');
+
+const infoCell = document.querySelector('.info'); //first cell in page - to initiate form
+const icon = document.querySelector('.add-prompt');
+const bookForm = document.querySelector('.adding-book-form');
+const cancelBtn = document.querySelector('.fa-window-close');
+const submitBtn = document.querySelector('.form-submit button');
+let formDisplay = false;
+
 const storage = (() => {
     const clearStorage = document.querySelector('.clear-storage');
     //checks if local storage available
@@ -31,11 +50,9 @@ const storage = (() => {
         for (let book in library.myLibrary) {
             delete library.myLibrary[book];
         }
-        library.bookCells.forEach(cell => cell.remove());
+        bookCells.forEach(cell => cell.remove());
         console.log(localStorage);
     }
-
-    console.log(localStorage);
 
     //get and set are already initialised
 
@@ -48,16 +65,6 @@ const storage = (() => {
 })();
 
 const form = (() => {
-    const infoCell = document.querySelector('.info'); //first cell in page - to initiate form
-    const icon = document.querySelector('.add-prompt');
-    const bookForm = document.querySelector('.adding-book-form');
-    const cancelBtn = document.querySelector('.fa-window-close');
-    const submitBtn = document.querySelector('.form-submit button');
-    let formDisplay = false;
-
-    const bookPages = document.getElementById('add-pages');
-    const bookPagesRead = document.getElementById('add-pages-read');
-
     function toggleForm() { //private metod example
         icon.classList.toggle('no-display');
         bookForm.classList.toggle('no-display');
@@ -120,19 +127,6 @@ const form = (() => {
 })();
 
 const library = (() => {
-    //initialise query selectors
-    let bookCells = document.querySelectorAll('.book');
-    let arrows = document.querySelectorAll('.arrow');
-    let progressIcon = document.querySelectorAll('.progress');
-    let pagesReadText = document.querySelectorAll('.pages-read');
-    const libraryGrid = document.querySelector('.library-grid')
-
-    //selectors for book form
-    const bookTitle = document.getElementById('add-title');
-    const bookAuthor = document.getElementById('add-author');
-    const bookPages = document.getElementById('add-pages');
-    const bookPagesRead = document.getElementById('add-pages-read');
-
     let myLibrary = []; //initialise array for library
 
     const checkStorage = (() => {
@@ -219,11 +213,11 @@ const library = (() => {
 
         //eventlisteners for book cell elements upon load
         arrows.forEach(arrow => {
-            arrow.addEventListener('click', book.changePagesRead);
+            arrow.addEventListener('click', cellWindow.changePagesRead);
         })
-        bookCells.forEach(cell => cell.addEventListener('click', book.cellWindowClick));
+        bookCells.forEach(cell => cell.addEventListener('click', cellWindow.cellWindowClick));
 
-        book.updateProgress(book, progress.dataset.num);
+        cellWindow.updateProgress(book, progress.dataset.num);
     }
 
     function limitChar(text) { //used with display book
@@ -239,7 +233,79 @@ const library = (() => {
         bookCells,
         progressIcon,
         pagesReadText,
-        myLibrary
+        myLibrary,
+        checkStorage
+    }
+})();
+
+const cellWindow = (() => {
+    function updateProgress(book, dataNum) {
+        progressIcon.forEach(icon => {
+            if (parseInt(icon.dataset.num) == parseInt(dataNum)) {
+                if (book.pagesRead == book.pages) {
+                    icon.style.color = 'rgb(17, 192, 17)';
+                } else {
+                    icon.style.color = 'rgba(189, 186, 186, 0.39)';
+                }
+            }
+        });
+    }
+    
+    function changePagesRead(e) {
+        let dataNum = e.target.dataset.num;
+        if (e.target.classList.contains('fa-arrow-left')) {
+            let book = library.myLibrary[dataNum];
+            if (book.pagesRead <= 0) return; // return if under limit
+            book.pagesRead -= 1;
+            updateBook(book, dataNum);
+            updateProgress(book, dataNum);
+        }
+    
+        if (e.target.classList.contains('fa-arrow-right')) {
+            let book = library.myLibrary[dataNum];
+            if (book.pagesRead >= book.pages) return; //return if over limit
+            book.pagesRead += 1;
+            updateBook(book, dataNum);
+            updateProgress(book, dataNum);
+        }
+    }
+
+    function updateBook(book, dataNum) {
+        localStorage.setItem(dataNum, JSON.stringify(library.myLibrary[dataNum]));
+            let allPagesRead = document.querySelectorAll('.pages-read');
+            allPagesRead.forEach(cell => {
+                if (cell.dataset.num == dataNum) {
+                    cell.textContent = `${book.pagesRead} / ${book.pages}`;
+                }
+            })
+    }
+
+    function cellWindowClick(e) { //BOOK? not sure if belongs here
+        let dataNum = e.currentTarget.dataset.num;
+        //remove book from display and library
+        if (e.target.classList.contains('fa-trash-alt')) {
+            updateKey(dataNum);
+            e.currentTarget.remove();
+        }
+    }
+
+    function updateKey(dataNum) {
+        library.myLibrary.splice(dataNum, 1);
+        localStorage.clear();
+        library.myLibrary.forEach(book => {
+            localStorage.setItem(library.myLibrary.indexOf(book), JSON.stringify(book));
+        });
+        bookCells.forEach(cell => {
+            cell.dataset.num = parseInt(cell.dataset.num) -1;
+        });
+    }
+
+    return {
+        updateKey,
+        cellWindowClick,
+        updateBook,
+        changePagesRead,
+        updateProgress
     }
 })();
 
@@ -250,65 +316,6 @@ class Book {
         this.pages = pages;
         this.pagesRead = pagesRead;
     }
-
-    updateProgress(book, dataNum) {
-        library.progressIcon.forEach(icon => {
-            if (icon.dataset.num == dataNum) {
-                if (book.pagesRead == book.pages) {
-                    icon.style.color = 'rgb(17, 192, 17)';
-                } else {
-                    icon.style.color = 'rgba(189, 186, 186, 0.39)';
-                }
-            }
-        });
-    }
-    
-    changePagesRead(e) {
-        let dataNum = e.target.dataset.num;
-        if (e.target.classList.contains('fa-arrow-left')) {
-            let book = library.myLibrary[dataNum];
-            if (book.pagesRead <= 0) return; // return if under limit
-            book.pagesRead -= 1;
-            book.updateBook(book, dataNum);
-            book.updateProgress(book, dataNum);
-        }
-    
-        if (e.target.classList.contains('fa-arrow-right')) {
-            let book = library.myLibrary[dataNum];
-            if (book.pagesRead >= book.pages) return; //return if over limit
-            book.pagesRead += 1;
-            book.updateBook(book, dataNum);
-            book.updateProgress(book, dataNum);
-        }
-    }
-
-    updateBook(book, dataNum) {
-        localStorage.setItem(dataNum, JSON.stringify(library.myLibrary[dataNum]));
-            let allPagesRead = document.querySelectorAll('.pages-read');
-            allPagesRead.forEach(cell => {
-                if (cell.dataset.num == dataNum) {
-                    cell.textContent = `${book.pagesRead} / ${book.pages}`;
-                }
-            })
-    }
-
-    cellWindowClick(e) { //BOOK? not sure if belongs here
-        let dataNum = e.currentTarget.dataset.num;
-        //remove book from display and library
-        if (e.target.classList.contains('fa-trash-alt')) {
-            book.updateKey(dataNum);
-            e.currentTarget.remove();
-        }
-    }
-
-    updateKey(dataNum) {
-        library.myLibrary.splice(dataNum, 1);
-        localStorage.clear();
-        library.myLibrary.forEach(book => {
-            localStorage.setItem(myLibrary.indexOf(book), JSON.stringify(book));
-        });
-        library.bookCells.forEach(cell => {
-            cell.dataset.num = parseInt(cell.dataset.num) -1;
-        });
-    }
 }
+
+library.checkStorage();
