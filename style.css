@@ -81,7 +81,7 @@ h1 {
 }
 
 .adding-book-form {
-    display: none;
+    display: flex;
     flex-direction: column;
     height: 100%;
     justify-content: space-around;
@@ -120,6 +120,14 @@ h1 {
 .info input[type="checkbox"] {
     width: auto;
     margin-left: 1rem;
+}
+
+.info:hover {
+    background-color:rgb(80, 124, 218);
+}
+
+.no-display {
+    display: none;
 }
 
 .pages-container {
