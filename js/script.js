@@ -9,6 +9,8 @@ const bookTitle = document.getElementById('add-title');
 const bookAuthor = document.getElementById('add-author');
 const bookPages = document.getElementById('add-pages');
 const bookPagesRead = document.getElementById('add-pages-read');
+const inputs = document.querySelectorAll('.form-text');
+const error = document.querySelector('.error-msg');
 
 const infoCell = document.querySelector('.info'); //first cell in page - to initiate form
 const icon = document.querySelector('.add-prompt');
@@ -76,39 +78,35 @@ const form = (() => {
         toggleForm();
     };
 
+    function invalid() {
+        let inv = false;
+        inputs.forEach(input => {
+            if (!input.checkValidity()) {
+                inv = true;
+                console.log(input);
+                input.classList.add('error');
+                error.classList.remove('no-display');
+            }
+            else {
+                input.classList.remove('error');
+            }
+        })
+
+        return inv;
+    }
+
     function removeForm() {
         bookForm.reset();
+        error.classList.add('no-display');
+        inputs.forEach(input => input.classList.remove('error'));
         toggleForm();
-    };
-
-    function empty() {
-        const text = Array.from(document.querySelectorAll('.form-text'));
-        return text.some(input => input.value == "");
-    };
-
-    function invalidTotalPages(num) {
-        return num < 1;
-    };
-
-    function invalidPagesRead(num) {
-        return parseInt(num) < 0 || parseFloat(num) > parseFloat(bookPages.value)
     };
 
     function submitEvent(e) {
         e.stopPropagation(); //stops page from refreshing
 
-        if (empty()) {
-            alert('Please properly state all details of the book.');
-            bookForm.reset();
+        if (invalid()) {
             return;
-        }
-        if (invalidTotalPages(parseFloat(bookPages.value)) || invalidPagesRead(parseFloat(bookPagesRead.value))) {
-            alert('Enter a proper number of pages');
-            bookForm.reset();
-            return;
-        }
-        if (!bookPagesRead.value) {
-            bookPagesRead.value = 0;
         }
 
         library.addBook();

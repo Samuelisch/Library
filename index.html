@@ -30,21 +30,24 @@
                         </div>
                         <div class="form-input">
                             <label for="add-title">Title:</label>
-                            <input type="text" name="add-book" id="add-title" class="form-text">
+                            <input type="text" name="add-book" id="add-title" class="form-text input-form" required>
                         </div>
                         <div class="form-input">
                             <label for="add-author">Author:</label>
-                            <input type="text" name="add-book" id="add-author" class="form-text">
+                            <input type="text" name="add-book" id="add-author" class="form-text input-form" required>
                         </div>
                         <div class="pages-container">
                             <div class="form-input">
                                 <label for="add-pages">Total pages:</label>
-                                <input type="number" name="add-book" id="add-pages" class="form-text">
+                                <input type="number" name="add-book" id="add-pages" class="form-text input-form" min="1" required>
                             </div>
                             <div class="form-input">
                                 <label for="add-pages-read">Pages read:</label>
-                                <input type="number" name="add-book" id="add-pages-read" value="0">
+                                <input type="number" name="add-book" id="add-pages-read" class="input-form" value="0" min="0">
                             </div>
+                        </div>
+                        <div>
+                            <p class="error-msg no-display">Please fill up highlighted boxes with valid values</p>
                         </div>
                         <div class="form-submit">
                             <button type="button">Add book</button>

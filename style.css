@@ -3,6 +3,7 @@
     --blue: rgb(63, 109, 207);
     --black: rgb(12, 12, 12);
     --white: rgb(236, 234, 234);
+    --red: rgba(255, 0, 0, 0.466);
 }
 
 html,
@@ -110,7 +111,7 @@ h1 {
     font-size: 1.5rem;
 }
 
-.info input {
+.input-form {
     width: 6em;
     background-color: var(--lightblue);
     border: none;
@@ -120,16 +121,6 @@ h1 {
 .info input[type="checkbox"] {
     width: auto;
     margin-left: 1rem;
-}
-
-.info:hover,
-.info:hover input[name="add-book"],
-.info:hover .form-submit > button {
-    background-color:rgb(80, 124, 218);
-}
-
-.no-display {
-    display: none;
 }
 
 .pages-container {
@@ -148,7 +139,19 @@ input::-webkit-inner-spin-button {
 
 input[type=number] { /* Firefox */
     -moz-appearance: textfield;
-  }
+}
+
+.error {
+    background-color: var(--red);
+    border-bottom: 1px solid var(--red);
+}
+
+.error-msg {
+    color: red;
+    text-align: center;
+    font-size: 1.3rem;
+    display: block;
+}
 
 .form-submit {
     text-align: center;
@@ -231,6 +234,10 @@ input[type=number] { /* Firefox */
 .fa-arrow-right {
     color: white;
     margin: 0 1rem;
+}
+
+.no-display {
+    display: none;
 }
 
 @media (min-width: 460px) {
