@@ -122,7 +122,9 @@ h1 {
     margin-left: 1rem;
 }
 
-.info:hover {
+.info:hover,
+.info:hover input[name="add-book"],
+.info:hover .form-submit > button {
     background-color:rgb(80, 124, 218);
 }
 
@@ -161,14 +163,14 @@ input[type=number] { /* Firefox */
 }
 
 .form-submit button:hover {
-    color: var(--lightblue);
+    color: var(--black);
     background-color: var(--white);
-    border-color: var(--lightblue);
+    border-color: var(--black);
     cursor: pointer;
 }
 
 .form-submit button:active {
-    color: var(--blue);
+    color: var(--white);
 }
 
 .book {
